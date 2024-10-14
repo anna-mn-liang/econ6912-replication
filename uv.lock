@@ -317,7 +317,7 @@ dependencies = [
 requires-dist = [
     { name = "ipykernel", specifier = ">=6.29.5" },
     { name = "jupyterlab", specifier = ">=4.2.4" },
-    { name = "matplotlib" },
+    { name = "matplotlib", specifier = ">=3.9.2" },
     { name = "numpy", specifier = ">=2.1.0" },
     { name = "openpyxl", specifier = ">=3.1.5" },
     { name = "pandas", specifier = ">=2.2.2" },
