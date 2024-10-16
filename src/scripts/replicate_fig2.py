@@ -51,8 +51,8 @@ import sys
 sys.path.append('/Users/annaliang/Documents/Repositories/econ6912-replication/src/scripts')
 from functions import doProxySVAR, doProxySVARci
 
-# varlist = ['HP', 'HR', 'RVR', 'HOMEOWN']
-varlist = ['HP']
+varlist = ['HP', 'HR', 'RVR', 'HOMEOWN']
+# varlist = ['HP']
 
 # Parameters
 nboot = 5000; # Number of Bootstrap Samples (Paper does 5000)
@@ -72,7 +72,6 @@ for x_var in varlist:
     VAR = VARStruct(p, irhor, vars=mdata[['gs1', 'IP', 'ebp', 'CPI', x_var]], proxies=ppdata[['ff4_tc']])
 
     modelVAR = doProxySVAR(VAR)
-    modelVAR.irs
 
     VARci = doProxySVARci(VAR, modelVAR, clevel, nboot, BlockSize)
 
@@ -84,16 +83,15 @@ for x_var in varlist:
     VARci.irsL = VARci.irsL * shocksize
     VARci.irs = VARci.irs * shocksize
 
-    # irs_plot[:, varlist.index(x_var)] = VARci.irs.iloc[:, 4]
-    # irsH_plot[:, varlist.index(x_var)] = VARci.irsH.iloc[:, 4]
-    # irsL_plot[:, varlist.index(x_var)] = VARci.irsL.iloc[:, 4]
+    irs_plot[:, varlist.index(x_var)] = VARci.irs[x_var]
+    irsH_plot[:, varlist.index(x_var)] = VARci.irsH[x_var]
+    irsL_plot[:, varlist.index(x_var)] = VARci.irsL[x_var]
 
+irs_plot = pd.DataFrame(irs_plot, columns=varlist)
+irsH_plot = pd.DataFrame(irsH_plot, columns=varlist)
+irsL_plot = pd.DataFrame(irsL_plot, columns=varlist)
 
-# irs_plot = pd.DataFrame(irs_plot, columns=varlist)
-# irsH_plot = pd.DataFrame(irs_plot, columns=varlist)
-# irsL_plot = pd.DataFrame(irs_plot, columns=varlist)
-
-# VARci = VARciStruct(irsH=irsH_plot, irsL=irsL_plot, irs=irs_plot, irsHhall=irsH_plot, irsLhall=irsL_plot)
+VARci_plot = VARciStruct(irsH=irsH_plot, irsL=irsL_plot, irs=irs_plot, irsHhall=irsH_plot, irsLhall=irsL_plot)
 
 # %%
 import matplotlib.pyplot as plt
@@ -101,8 +99,8 @@ import matplotlib.pyplot as plt
 plotdisplay = ['HP', 'HR', 'RVR', 'HOMEOWN']
 FigLabels = ['Housing Prices', 'Housing Rents', 'Housing Stock for Renting Vacancy Rate', 'Homeownership Rate']
 
-# display1 = np.array([0, 1, 2, 3])
-display1 = np.array([4])
+display1 = np.array([0, 1, 2, 3])
+# display1 = np.array([0])
 
 fig, axes = plt.subplots(2, 2, figsize=(10,8), constrained_layout=True)
 axes = axes.flatten()
@@ -110,12 +108,12 @@ axes = axes.flatten()
 for nvar in range(len(display1)):
     if VARci is not None:
         ax = axes[nvar]
-        h, = ax.plot(range(VAR.irhor), VARci.irs.iloc[:, display1[nvar]], 'r', linewidth=1.5)
+        h, = ax.plot(range(VAR.irhor), VARci_plot.irs.iloc[:, display1[nvar]], 'r', linewidth=1.5)
         
         ax.set_xlim([0, VAR.irhor - 1])
         
-        if VARci.irsH is not None:
-            ax.fill_between(range(VAR.irhor), VARci.irsH.iloc[:, display1[nvar]], VARci.irsL.iloc[:, display1[nvar]], color='blue', alpha=0.15)
+        if VARci_plot.irsH is not None:
+            ax.fill_between(range(VAR.irhor), VARci_plot.irsH.iloc[:, display1[nvar]], VARci_plot.irsL.iloc[:, display1[nvar]], color='blue', alpha=0.15)
         
         ax.axhline(0, color='k', linestyle='-')
         title_text = FigLabels[nvar]
