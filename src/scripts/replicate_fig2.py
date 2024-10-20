@@ -13,7 +13,7 @@
 # ---
 
 # %%
-from econ_lib import data_dir
+from econ_lib import data_dir, outputs_dir
 print(data_dir)
 
 import numpy as np 
@@ -47,9 +47,9 @@ ppdata
 # %%
 from dataclasses import dataclass
 from scripts.classes import VARStruct, ModelStruct, VARciStruct
-import sys
-sys.path.append('/Users/annaliang/Documents/Repositories/econ6912-replication/src/scripts')
-from functions import doProxySVAR, doProxySVARci
+# import sys
+# sys.path.append('/Users/annaliang/Documents/Repositories/econ6912-replication/src/scripts')
+from scripts.functions import doProxySVAR, doProxySVARci
 
 varlist = ['HP', 'HR', 'RVR', 'HOMEOWN']
 # varlist = ['HP']
@@ -124,6 +124,7 @@ for nvar in range(len(display1)):
         ax.yaxis.grid(True)
 
 plt.tight_layout()
+plt.savefig(outputs_dir / 'Figure2.png', dpi=300)
 plt.show()
 
 # %%
