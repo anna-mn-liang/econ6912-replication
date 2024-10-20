@@ -122,6 +122,6 @@ for nvar in range(len(display1)):
 axes.flat[-1].set_visible(False) # to remove last plot
 
 plt.tight_layout()
-plt.savefig(outputs_dir / 'Figure1.png', dpi=300)
+plt.savefig(outputs_dir / 'Figure1_US.png', dpi=300)
 plt.show()
 

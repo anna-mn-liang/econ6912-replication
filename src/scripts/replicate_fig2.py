@@ -124,7 +124,7 @@ for nvar in range(len(display1)):
         ax.yaxis.grid(True)
 
 plt.tight_layout()
-plt.savefig(outputs_dir / 'Figure2.png', dpi=300)
+plt.savefig(outputs_dir / 'Figure2_US.png', dpi=300)
 plt.show()
 
 # %%
