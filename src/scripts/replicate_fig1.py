@@ -2,9 +2,9 @@
 # Title: Replicate Figure 1 of Dias and Duarte (2019)
 # Author: Anna Liang
 # Description: This python script is based off Dias and Duarte's MATLAB script Replicate_Figure1.m
-#   It solves the SVAR model and uses the MBB method to re-sample for the 68% confidence intervals. 
+#   It solves the SVAR model and uses the MBB method to re-sample for the 68% confidence bands. 
 # Inputs: N/A
-# Output: Shows Figure 1 and saves as png to the output folder
+# Output: Shows Figure 1 and saves as png to the outputs folder
 
 # jupyter:
 #   jupytext:
@@ -50,8 +50,7 @@ ppdata = ppdata.fillna(0)
 ppdata
 
 # %%
-from dataclasses import dataclass
-from scripts.classes import VARStruct, ModelStruct, VARciStruct
+from scripts.classes import VARStruct
 from scripts.functions import doProxySVAR, doProxySVARci
 
 # %%
@@ -75,8 +74,8 @@ modelVAR = doProxySVAR(VAR)
 VARci = doProxySVARci(VAR, modelVAR, clevel, nboot, BlockSize)
 
 # %%
-# Define the shock and scale the impulse responses
-shocksize = -0.25
+# Set a contractionary 25bps MP shock and scale the impulse responses
+shocksize = -0.25 
 shock = 1
 
 modelVAR.irs = modelVAR.irs * shocksize
@@ -85,7 +84,7 @@ VARci.irsL = VARci.irsL * shocksize
 VARci.irs = VARci.irs * shocksize
 
 # %%
-## Plot the IRFs and the 68% confidence intervals 
+## Plot the median IRFs and the 68% confidence bands
 
 import matplotlib.pyplot as plt
 
