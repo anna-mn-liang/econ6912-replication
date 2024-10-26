@@ -85,7 +85,6 @@ VARci.irs = VARci.irs * shocksize
 
 # %%
 ## Plot the median IRFs and the 68% confidence bands
-
 import matplotlib.pyplot as plt
 
 plotdisplay = ['IP', 'RENTS', 'CPI', 'GS1', 'EBP']

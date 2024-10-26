@@ -63,18 +63,23 @@ np.random.seed(seed)
 p=4
 irhor=20
 
+# Initialize arrays to store IRFs from each iteration of the SVAR-solving loop
 irs_plot = np.zeros((irhor, len(varlist)))
 irsH_plot = np.zeros((irhor, len(varlist)))
 irsL_plot = np.zeros((irhor, len(varlist)))
 
+# Solve the SVAR with the common core variables and one added housing variable each iteration
 for x_var in varlist:
     # Define VAR struct with hardcoded variables
     VAR = VARStruct(p, irhor, vars=mdata[['gs1', 'IP', 'ebp', 'CPI', x_var]], proxies=ppdata[['ff4_tc']])
 
+    # Solve the SVAR model
     modelVAR = doProxySVAR(VAR)
 
+    # Resample using the Moving Block Bootstrap method
     VARci = doProxySVARci(VAR, modelVAR, clevel, nboot, BlockSize)
 
+    # Set a contractionary 25bps MP shock and scale the impulse responses
     shocksize = -0.25
     shock = 1
 
@@ -83,6 +88,7 @@ for x_var in varlist:
     VARci.irsL = VARci.irsL * shocksize
     VARci.irs = VARci.irs * shocksize
 
+    # Store the IRFs in the arrays to plot
     irs_plot[:, varlist.index(x_var)] = VARci.irs[x_var]
     irsH_plot[:, varlist.index(x_var)] = VARci.irsH[x_var]
     irsL_plot[:, varlist.index(x_var)] = VARci.irsL[x_var]
@@ -94,6 +100,7 @@ irsL_plot = pd.DataFrame(irsL_plot, columns=varlist)
 VARci_plot = VARciStruct(irsH=irsH_plot, irsL=irsL_plot, irs=irs_plot, irsHhall=irsH_plot, irsLhall=irsL_plot)
 
 # %%
+## Plot the median IRFs and the 68% confidence bands
 import matplotlib.pyplot as plt
 
 plotdisplay = ['HP', 'HR', 'RVR', 'HOMEOWN']
