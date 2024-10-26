@@ -3,7 +3,7 @@
 # Author: Anna Liang
 # Description: This python script is based off Dias and Duarte's MATLAB script Replicate_Figure1.m
 #   It solves the SVAR model and uses the MBB method to re-sample for the 68% confidence bands. 
-# Inputs: N/A
+# Inputs: Data files monthly_data.xlsx and monthly_factors.xlsx
 # Output: Shows Figure 1 and saves as png to the outputs folder
 
 # jupyter:
@@ -36,6 +36,34 @@ mdata.loc[:, ["CPI", "IP"]] = np.log(mdata.loc[:,["CPI", "IP"]])*100
 mdata.loc[:,["rents", "cpinet", "pce", "pcenet", "shelter"]] = np.log(mdata.loc[:,["rents", "cpinet", "pce", "pcenet", "shelter"]])*100
 mdata = mdata.fillna(0)
 mdata = mdata.query("year >=1983 & month>=1")
+
+# %%
+import matplotlib.pyplot as plt
+
+# Determine the number of subplots needed
+num_plots = len(mdata.columns) - 2  # Exclude 'year' and 'month'
+num_cols = 3  # Number of columns in the subplot grid
+num_rows = (num_plots + num_cols - 1) // num_cols  # Calculate the number of rows needed
+
+fig, axes = plt.subplots(num_rows, num_cols, figsize=(15, num_rows * 5))
+axes = axes.flatten()  # Flatten the axes array for easy iteration
+
+for i, column in enumerate(mdata.columns):
+    if column not in ['year', 'month']:
+        ax = axes[i-1]
+        ax.plot(mdata['year'] + (mdata['month'] - 1) / 12, mdata[column], label=column)
+        ax.set_xlabel('Year')
+        ax.set_ylabel(column)
+        ax.set_title(f'Time Series of {column}')
+        ax.legend()
+        ax.grid(True)
+
+# Remove any unused subplots
+axes.flat[0].set_visible(False) # to remove first plot
+axes.flat[-1].set_visible(False) # to remove last plot
+
+plt.tight_layout()
+plt.savefig(outputs_dir / 'Check_US_data.png', dpi=300)
 
 # %%
 ## Read monthly shock identification data
@@ -85,8 +113,6 @@ VARci.irs = VARci.irs * shocksize
 
 # %%
 ## Plot the median IRFs and the 68% confidence bands
-import matplotlib.pyplot as plt
-
 plotdisplay = ['IP', 'RENTS', 'CPI', 'GS1', 'EBP']
 FigLabels = ['Industrial Production', 'Rents', 'CPI', 'One-Year Rate', 'Excess Bond Premium']
 

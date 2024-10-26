@@ -97,7 +97,7 @@ irs_plot = pd.DataFrame(irs_plot, columns=varlist)
 irsH_plot = pd.DataFrame(irsH_plot, columns=varlist)
 irsL_plot = pd.DataFrame(irsL_plot, columns=varlist)
 
-VARci_plot = VARciStruct(irsH=irsH_plot, irsL=irsL_plot, irs=irs_plot, irsHhall=irsH_plot, irsLhall=irsL_plot)
+VARci_plot = VARciStruct(irsH=irsH_plot, irsL=irsL_plot, irs=irs_plot)
 
 # %%
 ## Plot the median IRFs and the 68% confidence bands
@@ -124,8 +124,9 @@ for nvar in range(len(display1)):
         
         ax.axhline(0, color='k', linestyle='-')
         title_text = FigLabels[nvar]
-        ax.set_title(title_text, fontsize=12)
+        ax.set_title(title_text, fontsize=14)
         ax.set_xticks(np.arange(0, VAR.irhor, 6))
+        ax.set_xticklabels(ax.get_xticks(), fontsize=12)
         ax.grid(True)
         ax.xaxis.grid(False)
         ax.yaxis.grid(True)
