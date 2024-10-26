@@ -23,7 +23,7 @@ import pandas as pd
 ## Read and transform quarterly data
 mdata_filepath = data_dir / "quarterly_data_AUS.xlsx"
 mdata = pd.read_excel(mdata_filepath)
-mdata = mdata.query("year<2020")
+mdata = mdata.query("year<=2020 & quarter<=3")
 
 # Rename columns
 colnames = ['year', 'quarter', 'CPI', 'IP', 'DFD', '2YRate', '3YSpread', 'HP', 'rents', 'HO']

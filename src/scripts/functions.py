@@ -59,6 +59,7 @@ def doProxySVAR(VAR):
 
     # VAR.bet   = [X VAR.DET(VAR.p+1:end,:)]\Y; performs OLS to calculate the VAR coefficients bet
     # Use the normal equation which is equivalent to the \ operator in MATLAB
+    # Eta in the paper
     bet = np.linalg.lstsq(X_with_det, Y_mat, rcond=None)[0]
     # Calculate the residuals 
     res = Y_mat - np.dot(X_with_det, bet)
@@ -191,8 +192,8 @@ def doProxySVARci(VAR, modelVAR, clevel, nboot, BlockSize):
 
     while jj < nboot + 1:
         # Draw bootstrapped residuals and proxies
-        # Generate random indices for selecting blocks
-
+        # Generate random indices for selecting blocks with replacement, 
+        # and equal prob on each element in the set the indices are drawn from
         index = (np.ceil(modelVAR.Tval - BlockSize + 1) * np.random.rand(nBlock, 1)).astype(int)
 
         U_boot = np.zeros((nBlock * BlockSize, modelVAR.n))
@@ -209,7 +210,7 @@ def doProxySVARci(VAR, modelVAR, clevel, nboot, BlockSize):
         # Center the bootstrapped residuals and proxies
         U_boot = U_boot - centering
 
-        # Loop through bootstrapping sample of proxies and center the non-zero values
+        # Loop through bootstrapping sample of proxies and center the non-zero values so that they have zero-mean. 
         for j in range(modelVAR.k):
             non_zero_indices = M_boot[:, j] != 0
             M_boot[non_zero_indices, j] = M_boot[non_zero_indices, j] - Mcentering[non_zero_indices, j]
