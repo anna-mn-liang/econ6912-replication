@@ -13,9 +13,8 @@ uv run src/scripts/replicate_fig1.py
 uv run src/scripts/replicate_fig2.py 
 uv run src/scripts/replicate_fig1_AUS.py 
 uv run src/scripts/replicate_fig2_AUS.py 
-```
-Each script takes about a minute to run. 
+``` 
 
-To run the Jupyter notebook for cleaning the AUS data, open the file `/src/scripts/replicate_fig1.py` and 'Run All'. 
+To run the Jupyter notebook for cleaning the AUS data, run `uv run jupyter lab` and open the file `/src/scripts/data_cleaning.ipynb`. In the notebook, 'Run All'. 
 
 
