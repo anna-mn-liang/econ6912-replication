@@ -95,7 +95,8 @@ seed = 2; # seed for random number generator
 np.random.seed(seed)
 
 # Define VAR struct to feed into model
-VAR = VARStruct(p, irhor, vars=mdata[['CPI', 'IP', '2YRate', '3YSpread', 'rents']], proxies=ppdata[['agg_shock']])
+VAR = VARStruct(p, irhor, vars=mdata[['2YRate', 'IP', '3YSpread', 'CPI', 'rents']], proxies=ppdata[['agg_shock']])
+
 # %%
 ## Solve the SVAR model
 modelVAR = doProxySVAR(VAR)
